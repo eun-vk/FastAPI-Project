@@ -61,3 +61,7 @@ journal = {
 | 상담일지 전체 조회 | 모든 상담일지 목록 가져오기        | GET  | `/journals`      |
 | 상담일지 상세 조회 | 특정 ID의 상담일지 내용 보기      | GET  | `/journals/{id}` |
 | GPT 대화     | 해당 일지 내용을 바탕으로 GPT와 대화 | POST | `/chat/{id}`     |
+
+---
+![사회복지사](https://github.com/user-attachments/assets/f439a646-057c-46e0-a552-110cbb1a3ef6)
+
