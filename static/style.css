@@ -1,0 +1,251 @@
+/* Google Fonts 임포트 - 반드시 최상단에! */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nanum Gothic', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+    margin: 0;
+    padding: 40px 20px;
+    color: #334e68;
+    min-height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    font-weight: 800;
+    font-size: 2.6rem;
+    color: #102a43;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    /* h2의 기본 마진을 초기화하거나 더 일관성 있게 설정 */
+    margin-top: 0; /* 이전에 5px를 주었을 경우 이 값을 0으로 두어 하위 선택자에서 제어 */
+    margin-bottom: 15px; /* 기본 하단 마진 유지 */
+    color: #243b53;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* 두 섹션의 h2에 일관된 상단 여백을 주기 위해 수정 */
+.journal-section h2,
+.counselor-section h2 {
+    margin-top: 5px; /* 두 섹션의 h2 모두에게 상단 여백 5px 부여 */
+    margin-bottom: 15px; /* 기존 하단 여백 유지 */
+}
+
+
+p {
+    text-align: center;
+    font-size: 1rem;
+    color: #627d98;
+    margin-bottom: 30px;
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffffcc;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.journal-section, .counselor-section {
+    background: white;
+    padding: 30px 25px; /* 섹션 자체의 내부 패딩 */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(33, 48, 77, 0.07);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #334e68;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1.8px solid #bcccdc;
+    font-size: 1rem;
+    color: #334e68;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Nanum Gothic', sans-serif;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3366ff;
+    box-shadow: 0 0 8px rgba(51, 102, 255, 0.3);
+    background-color: #f0f4ff;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+button {
+    background: #3366ff;
+    color: white;
+    padding: 12px 0;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: auto;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 5px 15px rgba(51, 102, 255, 0.3);
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* 상담일지 저장 버튼 너비 100% 유지 */
+.save-button {
+    width: 100%;
+}
+
+button:hover {
+    background-color: #274bdb;
+    box-shadow: 0 8px 20px rgba(39, 75, 219, 0.5);
+}
+
+.chat-area {
+    display: flex;
+    flex-direction: column;
+    background: #f7f9fc;
+    border-radius: 12px;
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    box-shadow: inset 0 0 5px rgba(51, 102, 255, 0.1);
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #334e68;
+}
+
+.message {
+    padding: 12px 18px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    max-width: 85%;
+    line-height: 1.5;
+    word-break: keep-all;
+}
+
+.message.ai {
+    background-color: #e1eaff;
+    align-self: flex-start;
+    color: #26418f;
+    box-shadow: 0 2px 6px rgba(38, 65, 143, 0.2);
+}
+
+.message.user {
+    background-color: #3366ff;
+    color: white;
+    align-self: flex-end;
+    box-shadow: 0 2px 6px rgba(51, 102, 255, 0.3);
+}
+
+/* 입력 영역 스타일 - HTML에 class="input-area" 적용 필요 */
+.input-area {
+    display: flex;
+    gap: 10px;
+}
+
+.input-area input[type="text"] {
+    flex-grow: 1;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 1.5px solid #bcccdc;
+    font-size: 1rem;
+    font-family: 'Nanum Gothic', sans-serif;
+    transition: border-color 0.3s ease;
+    min-width: 0; /* flexbox 버그 방지용 */
+}
+
+.input-area input[type="text"]:focus {
+    outline: none;
+    border-color: #3366ff;
+    box-shadow: 0 0 8px rgba(51, 102, 255, 0.3);
+}
+
+.input-area button {
+    padding: 0 25px;
+    font-size: 1.5rem;
+    background-color: #3366ff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(51, 102, 255, 0.3);
+    transition: background-color 0.3s ease;
+}
+
+.input-area button:hover {
+    background-color: #274bdb;
+}
+
+/* 반응형 */
+@media (min-width: 900px) {
+    .content-container {
+        flex-direction: row;
+    }
+}
+
+/* 버튼 그룹 세로 정렬 */
+.button-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100px; /* 필요 시 조절 */
+}
+
+/* 새 상담 시작 버튼 - h2 내부에서 오른쪽 정렬 및 크기 키우기 */
+#new-session-btn {
+    min-width: 160px;
+    padding: 14px 22px;
+    cursor: pointer;
+    margin-top: 0;
+    margin-left: auto;
+    font-size: 1.35rem;
+    height: fit-content;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* 기존 button-container는 사용하지 않음 */
+.button-container {
+    display: none;
+}

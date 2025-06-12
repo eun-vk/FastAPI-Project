@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="UTF-8" />
+    <title>채팅 기록 조회</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            font-family: "Noto Sans KR", sans-serif;
+            background-color: #f7f9fc;
+            margin: 0; padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .chat-list {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            padding: 20px;
+        }
+        .chat-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            color: #1a73e8;
+            font-weight: 600;
+        }
+        .chat-item:hover {
+            background-color: #e8f0fe;
+        }
+        .no-records {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgb(0 0 0 / 0.2);
+            position: relative;
+        }
+        .modal h2 {
+            margin-top: 0;
+            color: #333;
+            word-break: break-word;
+        }
+        .modal p {
+            white-space: pre-wrap;
+            line-height: 1.5;
+            color: #444;
+        }
+        .modal .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #eee;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            color: #666;
+            transition: background 0.3s;
+        }
+        .modal .close-btn:hover {
+            background: #ccc;
+        }
+        .back-btn {
+            display: block;
+            max-width: 120px;
+            margin: 30px auto 0;
+            padding: 10px 15px;
+            background-color: #1a73e8;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgb(26 115 232 / 0.4);
+            transition: background-color 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #155ab6;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 12px 0;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-btn:hover {
+            background-color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <h1>🗂 사용자별 채팅 기록 조회</h1>
+    <div class="chat-list" id="chat-list">
+        <p class="no-records">기록을 불러오는 중입니다...</p>
+    </div>
+    <a href="/" class="back-btn">홈으로 돌아가기</a>
+
+    <!-- 모달 -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="close-btn" id="modal-close-btn" aria-label="닫기">&times;</button>
+            <h2 id="modal-title">채팅 상세</h2>
+            <div id="modal-content" style="white-space: pre-wrap; line-height: 1.5; color: #444;"></div>
+        </div>
+    </div>
+
+    <script>
+        const chatListDiv = document.getElementById('chat-list');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const userId = localStorage.getItem("user_id");
+
+        function openModal(session) {
+            modalTitle.textContent = `세션 ID: ${session.session_id.slice(0,8)}`;
+
+            let infoHtml = `<p><strong>생성 시간:</strong> ${new Date(session.created_at).toLocaleString()}</p>`;
+            infoHtml += `<p><strong>마지막 메시지 시간:</strong> ${new Date(session.last_message_at).toLocaleString()}</p>`;
+            infoHtml += `<hr>`;
+
+            session.messages.forEach(msg => {
+                infoHtml += `<p><strong>[${new Date(msg.timestamp).toLocaleString()}]</strong></p>`;
+                infoHtml += `<p><strong>질문:</strong> ${msg.question}</p>`;
+                infoHtml += `<p><strong>답변:</strong> ${msg.answer}</p>`;
+                infoHtml += `<button class="delete-btn" onclick="deleteMessage('${msg.id}')">🗑️ 삭제</button>`;
+                infoHtml += `<hr>`;
+            });
+
+            modalContent.innerHTML = infoHtml;
+            modalOverlay.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+            modalTitle.textContent = '';
+            modalContent.innerHTML = '';
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        async function loadChatHistory() {
+            if (!userId) {
+                chatListDiv.innerHTML = '<p class="no-records">사용자 ID를 찾을 수 없습니다.</p>';
+                return;
+            }
+            chatListDiv.innerHTML = '<p class="no-records">기록을 불러오는 중입니다...</p>';
+
+            try {
+                const res = await fetch(`/chat/sessions?user_id=${userId}`);
+                if (!res.ok) {
+                    chatListDiv.innerHTML = '<p class="no-records">기록을 불러오는데 실패했습니다.</p>';
+                    return;
+                }
+                const sessions = await res.json();
+                if (sessions.length === 0) {
+                    chatListDiv.innerHTML = '<p class="no-records">채팅 기록이 없습니다.</p>';
+                    return;
+                }
+
+                chatListDiv.innerHTML = '';
+                sessions.forEach(session => {
+                    const item = document.createElement('div');
+                    item.className = 'chat-item';
+                    item.textContent = `#${session.session_id.slice(0,8)} - ${new Date(session.created_at).toLocaleString()} (클릭하여 상세보기)`;
+                    item.title = "상세보기";
+                    item.addEventListener('click', () => openModal(session));
+                    chatListDiv.appendChild(item);
+                });
+            } catch (error) {
+                chatListDiv.innerHTML = '<p class="no-records">기록을 불러오는 중 오류가 발생했습니다.</p>';
+                console.error("기록 불러오기 실패", error);
+            }
+        }
+
+        async function deleteMessage(messageId) {
+            if (!confirm("이 메시지를 삭제하시겠습니까?")) return;
+            try {
+                const res = await fetch(`/chat/message/${messageId}?user_id=${userId}`, {
+                    method: "DELETE"
+                });
+                if (!res.ok) {
+                    const err = await res.json();
+                    alert("삭제 실패: " + (err.detail || "알 수 없는 오류"));
+                    return;
+                }
+                alert("삭제되었습니다.");
+                closeModal(); // 모달 닫고
+                loadChatHistory(); // 목록 다시 불러오기
+            } catch (error) {
+                alert("삭제 중 오류 발생");
+                console.error(error);
+            }
+        }
+
+        window.addEventListener('load', loadChatHistory);
+    </script>
+</body>
+</html>
