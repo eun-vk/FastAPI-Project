@@ -30,24 +30,6 @@
 
 ---
 
-### 📍 데이터 모델 구조 예시
-
-```python
-user = {
-  "username": "worker1",
-  "password": "1234"
-}
-
-journal = {
-  "id": "uuid",
-  "title": "2025-06-11 상담",
-  "content": "클라이언트는 주거 문제를 겪고 있으며...",
-  "created_by": "worker1"
-}
-```
-
----
-
 ## 📌2. 개발환경 
 ### 📍 개발환경  
 - HTML, CSS, JavaScript, Python
@@ -83,20 +65,23 @@ journal = {
 ---
 
 ## 📌 개발 일정(WBS)
-![image](https://github.com/user-attachments/assets/fdf1b28c-9633-4184-9be4-e83c5504a478)
+![스크린샷 2025-06-13 030014](https://github.com/user-attachments/assets/052dc0bc-d0c0-4c60-9756-f413d88386c2)
+
 
 ---
 
 ## 📌 와이어프레임 / UI
 
 ### 📍 와이어프레임
-![와이어프레임](https://github.com/user-attachments/assets/6eb78545-5714-4553-b438-abca3c507c0f)
+![와이어프레임](https://github.com/user-attachments/assets/45b74c1f-7968-4dd4-9f3d-5e956ed2dd01)
+
 
 ---
 
 ### 📍 화면 설계
 - 메인 화면
-![메인화면](https://github.com/user-attachments/assets/72e3bce1-93aa-4a95-a71a-f6fbfd7edf50)
+![메인화면](https://github.com/user-attachments/assets/6a79d0c3-0344-4a91-804a-8ffe4de10074)
+
 
 ---
 
