@@ -32,7 +32,7 @@
 
 ## 📌2. 개발환경 
 ### 📍 개발환경  
-- HTML, CSS, JavaScript, Python
+- HTML, CSS, JavaScript
 - 서비스 배포 환경 : GitHub Page
 
 ### 📍 배포 URL
